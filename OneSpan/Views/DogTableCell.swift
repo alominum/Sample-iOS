@@ -30,12 +30,15 @@ class DogTableCell: UITableViewCell {
     func fadeIn(_ image: UIImage?) {
         dogImageView.image = image
 
-        UIView.animate(withDuration: 0.3, delay: 0.3, options: []) {
+        UIView.animate(withDuration: 0.3, delay: 0.3, options: [], animations:  {
             self.dogImageView.alpha = 1
-        }
+        }, completion: { completed in
+            if completed {
+                self.dogImageContainer.startLoading()
+            }
+        })
     }
 }
-
 
 extension DogTableCell {
     func configure(with model: TableCellViewModel) {
