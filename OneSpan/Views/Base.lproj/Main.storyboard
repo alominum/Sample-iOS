@@ -111,6 +111,14 @@
                                     <constraint firstItem="MjS-B0-T4p" firstAttribute="width" secondItem="IRf-b8-qo4" secondAttribute="width" id="ukK-t4-yOG"/>
                                 </constraints>
                             </stackView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="x3o-E2-8NM">
+                                <rect key="frame" x="171.66666666666666" y="301" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="xOu-kp-18N"/>
+                                    <constraint firstAttribute="height" constant="50" id="zsg-hx-Zvz"/>
+                                </constraints>
+                                <color key="color" systemColor="tintColor"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="cGX-76-XbR"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -118,11 +126,14 @@
                             <constraint firstAttribute="trailing" secondItem="IRf-b8-qo4" secondAttribute="trailing" id="20e-my-AJv"/>
                             <constraint firstItem="IRf-b8-qo4" firstAttribute="leading" secondItem="cGX-76-XbR" secondAttribute="leading" id="HEL-aE-Rem"/>
                             <constraint firstItem="IRf-b8-qo4" firstAttribute="top" secondItem="cGX-76-XbR" secondAttribute="top" id="Nyj-Jb-qfy"/>
+                            <constraint firstItem="x3o-E2-8NM" firstAttribute="centerY" secondItem="mWb-MQ-Vci" secondAttribute="centerY" constant="-100" id="dc1-rg-wax"/>
                             <constraint firstAttribute="bottom" secondItem="IRf-b8-qo4" secondAttribute="bottom" id="iSq-bI-OMO"/>
+                            <constraint firstItem="x3o-E2-8NM" firstAttribute="centerX" secondItem="mWb-MQ-Vci" secondAttribute="centerX" id="ruC-Hm-zvS"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Dog Breeds" id="Syj-1R-K3D"/>
                     <connections>
+                        <outlet property="loadingIndicator" destination="x3o-E2-8NM" id="piq-jb-8Xc"/>
                         <outlet property="refreshButton" destination="Int-G1-GI7" id="vcA-xE-tKA"/>
                         <outlet property="refreshButtonContainer" destination="VoS-rb-2oG" id="Aek-HF-5FY"/>
                         <outlet property="tableView" destination="MjS-B0-T4p" id="TYy-me-Bre"/>
@@ -136,6 +147,9 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="tintColor">
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
