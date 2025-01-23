@@ -78,6 +78,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="breedName" destination="e5G-Ag-gYQ" id="sIZ-O1-PVc"/>
+                                    <outlet property="dogImageContainer" destination="pvu-sy-zrr" id="H5L-L9-KnL"/>
                                     <outlet property="dogImageView" destination="fT0-B3-CAl" id="0ee-RS-iCp"/>
                                 </connections>
                             </tableViewCell>

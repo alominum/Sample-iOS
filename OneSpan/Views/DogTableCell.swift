@@ -11,6 +11,35 @@ class DogTableCell: UITableViewCell {
 
     @IBOutlet private(set) public var breedName: UILabel!
     @IBOutlet private(set) public var dogImageView: UIImageView!
+    @IBOutlet private(set) public var dogImageContainer: UIView!
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+
+        dogImageView.alpha = 0
+        dogImageContainer.startLoading()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        dogImageView.alpha = 0
+        dogImageContainer.startLoading()
+    }
+
+    func fadeIn(_ image: UIImage?) {
+        dogImageView.image = image
+
+        UIView.animate(withDuration: 0.3, delay: 0.3, options: []) {
+            self.dogImageView.alpha = 1
+        }
+    }
+}
 
 
+extension DogTableCell {
+    func configure(with model: TableCellViewModel) {
+        breedName.text = model.name
+        fadeIn(model.image)
+    }
 }
