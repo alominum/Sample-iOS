@@ -90,6 +90,9 @@
                                                 <color key="tintColor" red="0.1215686275" green="0.1215686275" blue="0.1215686275" alpha="1" colorSpace="calibratedRGB"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" title="Refresh"/>
+                                                <connections>
+                                                    <action selector="refresh" destination="dV4-zN-Zbp" eventType="touchUpInside" id="r3I-dv-YfJ"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

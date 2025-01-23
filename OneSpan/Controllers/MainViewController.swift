@@ -7,7 +7,12 @@
 
 import UIKit
 
+protocol ViewControllerDelegate {
+    func didRequestRefresh()
+}
+
 class MainViewController: UIViewController {
+    var delegate: ViewControllerDelegate?
 
     @IBOutlet var tableView: UITableView!
     @IBOutlet var refreshButtonContainer: UIView!
@@ -24,6 +29,10 @@ class MainViewController: UIViewController {
 
     private func setupUI() {
         refreshButtonContainer.addShaddow()
+    }
+
+    @IBAction func refresh() {
+        delegate?.didRequestRefresh()
     }
 
 }
