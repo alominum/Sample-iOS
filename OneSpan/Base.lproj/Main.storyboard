@@ -26,7 +26,7 @@
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="DogTableCell" rowHeight="468" id="TQI-qA-ARk">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="DogTableCell" rowHeight="468" id="TQI-qA-ARk" customClass="DogTableCell" customModule="OneSpan" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="70" width="393" height="468"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="TQI-qA-ARk" id="nKT-Cr-550">
@@ -76,6 +76,10 @@
                                         <constraint firstItem="J5C-9v-Lnc" firstAttribute="trailing" secondItem="nKT-Cr-550" secondAttribute="trailingMargin" id="yp4-8C-0Dk"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="breedName" destination="e5G-Ag-gYQ" id="sIZ-O1-PVc"/>
+                                    <outlet property="dogImageView" destination="fT0-B3-CAl" id="0ee-RS-iCp"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
