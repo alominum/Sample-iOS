@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
 
-        let viewContrtoller = UIComposer.composedVC()
+        let viewContrtoller = UIComposer.composedVC(title: "Dog Breeds")
         let navigation = UINavigationController(rootViewController: viewContrtoller)
 
         window.rootViewController = navigation

@@ -10,8 +10,8 @@ import UIKit
 final class UIComposer {
     private init() {}
 
-    static func composedVC() -> MainViewController {
-        let controller = makeMainViewController(title: "Dog Breeds")
+    static func composedVC(title: String) -> MainViewController {
+        let controller = makeMainViewController(title: title)
         return controller
     }
 
