@@ -24,7 +24,6 @@ class MainViewController: UIViewController {
         tableView.dataSource = self
 
         setupUI()
-
     }
 
     private func setupUI() {
