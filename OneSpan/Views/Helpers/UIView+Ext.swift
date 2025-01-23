@@ -51,4 +51,13 @@ extension UIView {
     private func stopLoading() {
         layer.mask = nil
     }
+
+    func addShaddow() {
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.5
+        layer.shadowOffset = CGSize(width: 0, height: -3)
+        layer.shadowRadius = 3
+        layer.masksToBounds = false
+        layer.maskedCorners = [ .layerMaxXMinYCorner]
+    }
 }
