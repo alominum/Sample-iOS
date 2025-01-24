@@ -10,6 +10,7 @@ import UIKit
 class DogTableCell: UITableViewCell {
 
     @IBOutlet private(set) public var breedName: UILabel!
+    @IBOutlet private(set) public var subBreedNames: UILabel!
     @IBOutlet private(set) public var dogImageView: UIImageView!
     @IBOutlet private(set) public var dogImageContainer: UIView!
 
@@ -42,7 +43,8 @@ class DogTableCell: UITableViewCell {
 
 extension DogTableCell {
     func configure(with model: TableCellViewModel) {
-        breedName.text = model.name
-        fadeIn(model.image)
+        breedName.text = model.title.capitalized
+        subBreedNames.text = model.breedsDescription
+//        fadeIn(model.image)
     }
 }
