@@ -8,6 +8,22 @@
 import UIKit
 
 struct TableCellViewModel {
-    let name: String
-    let image: UIImage
+    let dog: Dog
+
+    init(_ model: Dog) {
+        self.dog = model
+    }
+
+    var breedsDescription: String {
+        if dog.subBreed.isEmpty {
+            return ""
+        } else {
+            return "Breed: \(dog.breed) has Sub-breeds: \(dog.subBreed.joined(separator: ", "))"
+        }
+    }
+
+    var title: String {
+        dog.breed
+    }
+
 }
