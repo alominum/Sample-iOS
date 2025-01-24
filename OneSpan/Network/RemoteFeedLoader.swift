@@ -2,7 +2,7 @@
 //  RemoteFeedLoader.swift
 //  OneSpan
 //
-//  Created by Nima Nassehi on 2025-01-23.
+//  Created by Nima Nassehi on 2025-01-24.
 //
 
 
@@ -16,7 +16,6 @@ final class RemoteFeedLoader: FeedLoader {
     enum Error: Swift.Error {
         case connectivity
         case invalidData
-        case invalidResponse
     }
 
     init(url: URL, client: HTTPClient) {
@@ -25,9 +24,15 @@ final class RemoteFeedLoader: FeedLoader {
     }
 
     func load() async throws -> [Dog] {
-        print("load()")
         let (data, response ) = try await client.get(from: url)
+
+        guard response.statusCode == 200 && !data.isEmpty else {
+            throw Error.invalidData
+        }
+
         let mappedDogs = try mapToDog(data, response: response)
+
+        // Fetching Breed URL for each dog
         return try await withThrowingTaskGroup(of: Dog.self) { [weak self] group in
             guard let self = self else { return mappedDogs }
 
@@ -54,6 +59,8 @@ final class RemoteFeedLoader: FeedLoader {
         return dog
     }
 
+
+    // MARK: - Helpers
     private func mapToDog(_ data: Data, response: HTTPURLResponse) throws -> [Dog] {
 
         let message = try FeedMapper<[String: [String]]>.decode(data, response)

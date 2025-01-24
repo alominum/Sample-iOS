@@ -8,7 +8,7 @@
 import UIKit
 
 struct TableCellViewModel {
-    let dog: Dog
+    private let dog: Dog
 
     init(_ model: Dog) {
         self.dog = model
@@ -24,6 +24,10 @@ struct TableCellViewModel {
 
     var title: String {
         dog.breed
+    }
+
+    var imageURL: URL? {
+        dog.imageUrl
     }
 
 }

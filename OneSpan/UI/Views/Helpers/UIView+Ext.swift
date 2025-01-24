@@ -26,7 +26,7 @@ extension UIView {
         return "loading"
     }
 
-     func startLoading() {
+     private func startLoading() {
         let white = UIColor.white.cgColor
         let alpha = UIColor.white.withAlphaComponent(0.75).cgColor
         let width = bounds.width

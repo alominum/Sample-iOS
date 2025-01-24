@@ -42,9 +42,18 @@
                                                                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ksk-oz-uAi" userLabel="Image Container">
                                                                     <rect key="frame" x="0.0" y="36.333333333333343" width="363" height="363"/>
                                                                     <subviews>
-                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YU4-AH-hJl">
+                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YU4-AH-hJl">
                                                                             <rect key="frame" x="0.0" y="0.0" width="363" height="363"/>
                                                                         </imageView>
+                                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QAC-i6-Q6J" userLabel="Retry">
+                                                                            <rect key="frame" x="134" y="138.66666666666663" width="96" height="86"/>
+                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                            <state key="normal" title="Button"/>
+                                                                            <buttonConfiguration key="configuration" style="plain" image="retry"/>
+                                                                            <connections>
+                                                                                <action selector="retryButtonTapped" destination="cPt-EB-XZu" eventType="touchUpInside" id="bkh-Cm-0zF"/>
+                                                                            </connections>
+                                                                        </button>
                                                                     </subviews>
                                                                     <color key="backgroundColor" red="0.89019607840000003" green="0.89019607840000003" blue="0.89019607840000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <constraints>
@@ -93,6 +102,7 @@
                                                     <outlet property="breedName" destination="A6P-Bv-DUX" id="qy6-E2-Hw4"/>
                                                     <outlet property="dogImageContainer" destination="ksk-oz-uAi" id="OoU-kZ-dJs"/>
                                                     <outlet property="dogImageView" destination="YU4-AH-hJl" id="DD7-xE-xNh"/>
+                                                    <outlet property="retryButton" destination="QAC-i6-Q6J" id="Pqj-Ve-t5X"/>
                                                     <outlet property="subBreedNames" destination="USv-EE-LMD" id="Pki-9I-ktR"/>
                                                 </connections>
                                             </tableViewCell>
@@ -161,11 +171,12 @@
         </scene>
     </scenes>
     <resources>
+        <image name="retry" width="72" height="72"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="tintColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
