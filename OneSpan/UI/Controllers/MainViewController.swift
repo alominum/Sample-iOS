@@ -14,15 +14,14 @@ class MainViewController: UIViewController {
     @IBOutlet weak var refreshButton: UIButton!
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
 
-    private var imageTasks: [IndexPath: Task<Void, Never>] = [:]
+    private var cellControllers = [IndexPath: DogCellController]()
 
-    private let feedLoader: FeedLoader
     private var refreshController: RefreshButtonController?
     private let imageLoader: FeedImageDataLoader
 
     init?(coder: NSCoder, titleText: String, feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) {
-        self.feedLoader = feedLoader
         self.imageLoader = imageLoader
+        self.refreshController = RefreshButtonController(feedLoader: feedLoader)
         super.init(coder: coder)
         self.title = titleText
     }
@@ -33,10 +32,7 @@ class MainViewController: UIViewController {
 
     private var tableModel: [TableCellViewModel] = [] {
         didSet {
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-
+            self.tableView.reloadData()
         }
     }
 
@@ -47,8 +43,7 @@ class MainViewController: UIViewController {
 
         setupUI()
 
-        refreshController = RefreshButtonController(feedLoader: feedLoader, loadingView: loadingIndicator, button: refreshButton)
-
+        refreshController?.setElements(loadingView: loadingIndicator, button: refreshButton)
         refreshController?.onRefresh = { [weak self] dogs in
             self?.tableModel = dogs.map{ TableCellViewModel($0) }
         }
@@ -59,7 +54,6 @@ class MainViewController: UIViewController {
     private func setupUI() {
         refreshButtonContainer.addShaddow()
         loadingIndicator.hidesWhenStopped = true
-
     }
 
 }
@@ -71,42 +65,14 @@ extension MainViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let model = tableModel[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: "DogTableCell", for: indexPath) as! DogTableCell
+        return cellController(for: indexPath).view(for: tableView, at: indexPath)
+    }
+}
 
-        cell.breedName.text = model.title.capitalized
-        cell.subBreedNames.text = model.breedsDescription
-        cell.dogImageView.image = nil
-        cell.retryButton.isHidden = true
-        cell.dogImageContainer.isLoading = true
-
-        let loadImage = { [weak self] in
-            guard let self = self, let imageUrl = model.imageURL else { return }
-
-
-            self.imageTasks[indexPath] = Task {
-                do {
-                    let imageData = try await self.imageLoader.loadImageData(from: imageUrl)
-                    let image = UIImage(data: imageData)
-                    await MainActor.run {
-                        cell.fadeIn(image)
-                        cell.retryButton.isHidden = (image != nil)
-                        cell.dogImageContainer.isLoading = false
-                    }
-                } catch {
-                    await MainActor.run {
-                        cell.dogImageContainer.isLoading = false
-                    }
-                }
-            }
-
-        }
-
-        cell.onRetry = loadImage
-
-        loadImage()
-
-        return cell
+// MARK: - Delegate
+extension MainViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        removeCellController(for: indexPath)
     }
 }
 
@@ -114,25 +80,25 @@ extension MainViewController: UITableViewDataSource {
 extension MainViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            let model = tableModel[indexPath.row]
-            imageTasks[indexPath] = Task {
-                do {
-                    guard let url = model.imageURL else { return }
-                    _ = try await self.imageLoader.loadImageData(from: url)
-                } catch {
-
-                }
-            }
+            cellController(for: indexPath).preload()
         }
     }
 
     func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
-        indexPaths.forEach { indexPath in
-            if let task = imageTasks[indexPath] {
-                task.cancel()
-                imageTasks[indexPath] = nil
-            }
-        }
+        indexPaths.forEach(removeCellController)
+    }
+
+    //MARK: - Helpers
+
+    fileprivate func cellController(for indexPath: IndexPath) -> DogCellController {
+        let model = tableModel[indexPath.row]
+        let cellController = DogCellController(model: model, imageLoader: imageLoader)
+        cellControllers[indexPath] = cellController
+        return cellController
+    }
+
+    private func removeCellController(for indexPath: IndexPath) {
+        cellControllers[indexPath] = nil
     }
 
 }

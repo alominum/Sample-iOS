@@ -27,7 +27,7 @@ class DogTableCell: UITableViewCell {
     }
 
     override func prepareForReuse() {
-        super.prepareForReuse() 
+        super.prepareForReuse()
 
         dogImageView.alpha = 0
         dogImageContainer.isLoading = true

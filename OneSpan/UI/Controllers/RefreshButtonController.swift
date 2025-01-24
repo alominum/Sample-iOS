@@ -8,38 +8,43 @@
 import UIKit
 
 final class RefreshButtonController {
-    let button: UIButton
-    let loadingView: UIActivityIndicatorView
+    var button: UIButton?
+    var loadingView: UIActivityIndicatorView?
     private let feedLoader: FeedLoader
 
     var onRefresh: (([Dog]) -> Void)?
 
-    init(feedLoader: FeedLoader, loadingView: UIActivityIndicatorView, button: UIButton) {
+    init(feedLoader: FeedLoader) {
         self.feedLoader = feedLoader
+
+    }
+
+    func setElements(loadingView: UIActivityIndicatorView, button: UIButton) {
         self.button = button
         self.loadingView = loadingView
         let refreshAction = UIAction(title: "Refresh") { (action) in
             self.refresh()
         }
-        self.button.addAction(refreshAction, for: .touchUpInside)
+        self.button?.addAction(refreshAction, for: .touchUpInside)
     }
 
     func refresh() {
-        loadingView.startAnimating()
+        loadingView?.startAnimating()
 
         Task {
             do {
                 let dogs = try await feedLoader.load()
-                onRefresh?(dogs)
                 await MainActor.run {
-                    loadingView.stopAnimating()
+                    onRefresh?(dogs)
+                    loadingView?.stopAnimating()
                 }
             } catch {
                 print(error)
                 await MainActor.run {
-                    loadingView.stopAnimating()
+                    loadingView?.stopAnimating()
                 }
             }
         }
     }
+
 }
