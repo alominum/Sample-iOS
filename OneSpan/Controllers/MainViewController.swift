@@ -12,6 +12,8 @@ protocol ViewControllerDelegate {
 }
 
 class MainViewController: UIViewController {
+    private var activeRefreshTask: Task<Void, Never>?
+
     var delegate: ViewControllerDelegate?
     private var loader: FeedLoader?
     private var tableModel: [TableCellViewModel] = [] {
@@ -46,22 +48,28 @@ class MainViewController: UIViewController {
 
     }
 
+    func text() async {
+        print("REFRESHING")
+    }
+
     @IBAction func refresh() {
         loadingIndicator.startAnimating()
-        loader?.load(completion: { result in
-            switch result {
-            case .success(let dogs):
-                self.tableModel = dogs.map{ TableCellViewModel($0) }
-//                print(dogs)
-            case .failure(let error):
-                print("Error loading: \(error)")
-            }
 
-            DispatchQueue.main.async {
-                self.loadingIndicator.stopAnimating()
-                self.tableView.reloadData()
+        activeRefreshTask = Task {
+            do {
+                let dogs = try await loader?.load() ?? []
+                await MainActor.run {
+                    self.tableModel = dogs.map{ TableCellViewModel($0) }
+                    loadingIndicator.stopAnimating()
+                    print(self.tableModel)
+                }
+            } catch {
+                print(error)
+                await MainActor.run {
+                    loadingIndicator.stopAnimating()
+                }
             }
-        })
+        }
 //        delegate?.didRequestRefresh()
     }
 

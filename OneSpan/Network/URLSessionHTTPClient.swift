@@ -9,13 +9,13 @@ import Foundation
 
 final class URLSessionHTTPClient: HTTPClient {
 
-    private struct URLSessionTaskWrapper: HTTPClientTask {
-        let wrapped: URLSessionTask
-
-        func cancel() {
-            wrapped.cancel()
-        }
-    }
+//    private struct TaskWrapper: HTTPClientTask {
+//        let wrapped: Task<(Data, HTTPURLResponse), any Error>
+//
+//        func cancel() {
+//            wrapped.cancel()
+//        }
+//    }
 
     private var session: URLSession
 
@@ -23,23 +23,21 @@ final class URLSessionHTTPClient: HTTPClient {
         self.session = session
     }
 
-    public typealias Result = HTTPClient.Result
+    func get(from url: URL) async throws -> (Data, HTTPURLResponse) {
 
-    private struct UnExpectedError: Error {}
+        let (data, response) = try await session.data(from: url)
 
-    public func get(from url: URL, completion: @escaping (Result) -> Void) -> HTTPClientTask {
-        let task = session.dataTask(with: url) { data, reseponse, error in
-            completion(Result {
-                if let error = error {
-                    throw error
-                } else if let data = data, let reseponse = reseponse as? HTTPURLResponse {
-                    return (data, reseponse)
-                } else {
-                    throw UnExpectedError()
-                }
-            })
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse, userInfo: [NSLocalizedDescriptionKey: "Invalid HTTP response."])
         }
-        task.resume()
-        return URLSessionTaskWrapper(wrapped: task)
+
+        guard httpResponse.statusCode == 200 else {
+            throw URLError(.badServerResponse, userInfo: [
+                NSLocalizedDescriptionKey: "Unexpected status code: \(httpResponse.statusCode)"
+            ])
+        }
+
+        return (data, httpResponse)
     }
+
 }

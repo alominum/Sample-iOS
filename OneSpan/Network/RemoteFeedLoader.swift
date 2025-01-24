@@ -24,63 +24,46 @@ final class RemoteFeedLoader: FeedLoader {
         self.client = client
     }
 
-    func load(completion: @escaping (FeedLoader.Result) -> Void) {
-        client.get(from: url) { [weak self] result in
-            guard let self = self else { return }
+    func load() async throws -> [Dog] {
+        print("load()")
+        let (data, response ) = try await client.get(from: url)
+        let mappedDogs = try mapToDog(data, response: response)
+        return try await withThrowingTaskGroup(of: Dog.self) { [weak self] group in
+            guard let self = self else { return mappedDogs }
 
-            switch result {
-            case .success((let data, let response)):
-                let mappedDogs = self.mapToDog(data, response: response)
-                switch mappedDogs {
-                    case .success(let dogs):
-                        dogs.forEach(  fetchDogImageURLs(dog:) )
-
-                    case.failure(let error):
-                        completion(.failure(error))
+            for dog in mappedDogs {
+                group.addTask {
+                    return try await self.fetchAndUpdateDogImageURLs(dog: dog)
                 }
-
-                completion(self.mapToDog(data, response: response))
-            case .failure:
-                completion(.failure(Error.connectivity))
-            }
-        }
-    }
-
-    private func fetchDogImageURLs(dog: Dog) {
-
-        client.get(from: dog.imageUrlApi) {  [weak self] result in
-            guard let self = self else { return }
-
-            switch result {
-            case .success((let data, let response)):
-                guard let imageUrl = try? self.mapToString(data, response: response).get() else {
-                    return
-                }
-                print(imageUrl)
-            case .failure:
-                break
             }
 
-        }
+            var updatedDogs: [Dog] = []
+            for try await dog in group {
+                updatedDogs.append(dog)
+            }
 
-    }
-
-    private func mapToDog(_ data: Data, response: HTTPURLResponse) -> FeedLoader.Result {
-        do {
-            let message = try FeedMapper<[String: [String]]>.decode(data, response)
-            let dogs = message.map { Dog(breed: $0, subBreed: $1) }
-            return .success(dogs)
-        } catch {
-            return .failure(error)
+            return updatedDogs
         }
     }
 
-    private func mapToString(_ data: Data, response: HTTPURLResponse) -> Result<String, Error> {
-        do {
-            let string = try FeedMapper<String>.decode(data, response)
-            return .success(string)
-        } catch {
-            return .failure(RemoteFeedLoader.Error.invalidData)
+    private func fetchAndUpdateDogImageURLs(dog: Dog) async throws -> Dog {
+        let (data, response ) = try await client.get(from: dog.imageUrlApi)
+        if let imageUrl = try? self.mapToString(data, response: response) {
+            return Dog(id: dog.id, breed: dog.breed, subBreed: dog.subBreed, imageUrl: URL(string: imageUrl)!)
         }
+        return dog
+    }
+
+    private func mapToDog(_ data: Data, response: HTTPURLResponse) throws -> [Dog] {
+
+        let message = try FeedMapper<[String: [String]]>.decode(data, response)
+        let dogs = message.map { Dog(breed: $0, subBreed: $1) }
+        return dogs
+
+    }
+
+    private func mapToString(_ data: Data, response: HTTPURLResponse) throws -> String {
+        let string = try FeedMapper<String>.decode(data, response)
+        return string
     }
 }
