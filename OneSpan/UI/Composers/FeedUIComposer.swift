@@ -10,13 +10,12 @@ import UIKit
 final class UIComposer {
     private init() {}
 
-    static func composedVC(titleText: String, feedLoader: FeedLoader, imageLoader: ImageDataLoader) -> MainViewController {
-        let controller = makeMainViewController(titleText: titleText, feedLoader: feedLoader, imageLoader: imageLoader)
-        return controller
+    static func composedVC(titleText: String, feedLoader: FeedLoader, imageLoader: ImageDataLoader, cache: ImageDataStore) -> MainViewController {
+        makeMainViewController(titleText: titleText, feedLoader: feedLoader, imageLoader: imageLoader, cache: cache)
     }
 
-    private static func makeMainViewController(titleText: String, feedLoader: FeedLoader, imageLoader: ImageDataLoader) -> MainViewController {
-        let refreshController = RefreshButtonController(feedLoader: feedLoader)
+    private static func makeMainViewController(titleText: String, feedLoader: FeedLoader, imageLoader: ImageDataLoader, cache: ImageDataStore) -> MainViewController {
+        let refreshController = RefreshController(feedLoader: feedLoader)
 
         let bundle = Bundle(for: MainViewController.self)
         let storyboard = UIStoryboard(name: "Main", bundle: bundle)
@@ -26,6 +25,9 @@ final class UIComposer {
         controller.title = titleText
 
         refreshController.onRefresh = { [weak controller] dogs in
+            Task {
+                await cache.reset()
+            }
             controller?.tableModel = dogs.map{ TableCellViewModel($0) }.map{DogCellController(model: $0, imageLoader: imageLoader)}
         }
 

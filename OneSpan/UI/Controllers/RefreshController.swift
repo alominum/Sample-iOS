@@ -1,5 +1,5 @@
 //
-//  RefreshButtonController.swift
+//  RefreshController.swift
 //  OneSpan
 //
 //  Created by Nima Nassehi on 2025-01-24.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class RefreshButtonController {
+final class RefreshController {
     var button: UIButton?
     var loadingView: UIActivityIndicatorView?
     private let feedLoader: FeedLoader
@@ -16,7 +16,6 @@ final class RefreshButtonController {
 
     init(feedLoader: FeedLoader) {
         self.feedLoader = feedLoader
-
     }
 
     func setElements(loadingView: UIActivityIndicatorView, button: UIButton) {

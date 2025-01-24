@@ -23,11 +23,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let cache = InMemoryImageDataStore()
         let localImageLoader = CachedImageDataLoader(cache: cache)
 
-        let remoteWithCacheLoader = ImageDataLoaderCacheAdapter(cache: cache, loader: remoteImageLoader)
+        let remoteLoaderWithCache = ImageDataRemoteCacheComposition(cache: cache, loader: remoteImageLoader)
 
-        let composedImageLoader = ImageDataLoaderWithFallback(primary: localImageLoader, secondary: remoteWithCacheLoader)
+        let composedImageLoader = ImageDataLoaderWithFallback(primary: localImageLoader, secondary: remoteLoaderWithCache)
 
-        let viewContrtoller = UIComposer.composedVC(titleText: "Dog Breeds", feedLoader: feedLoader, imageLoader: composedImageLoader)
+        let viewContrtoller = UIComposer.composedVC(titleText: "Dog Breeds", feedLoader: feedLoader, imageLoader: composedImageLoader, cache: cache)
         let navigation = UINavigationController(rootViewController: viewContrtoller)
 
         window.rootViewController = navigation

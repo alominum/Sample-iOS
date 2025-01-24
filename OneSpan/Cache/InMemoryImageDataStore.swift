@@ -13,9 +13,9 @@ actor InMemoryImageDataStore: ImageDataStore {
     }
 
     private var store: [URL: Data] = [:]
-
+    
     func save(_ data: Data, for url: URL) {
-        print("\(url) --------->")
+        print("\(url) ---------> 📦")
         store[url] = data
     }
 
@@ -23,11 +23,12 @@ actor InMemoryImageDataStore: ImageDataStore {
         guard let data = store[url] else {
             throw CacheError.notFound
         }
-        print("<=========: \(url)")
+        print("📤 =========> \(url)")
         return data
     }
 
     func reset() async {
+        print("\(store.count) image removed from cache.")
         store.removeAll()
     }
 }

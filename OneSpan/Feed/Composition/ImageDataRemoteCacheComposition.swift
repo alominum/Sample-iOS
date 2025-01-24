@@ -1,6 +1,6 @@
 
 //
-//  ImageDataRemoteCacheAdapter.swift
+//  ImageDataRemoteCacheComposition.swift
 //  OneSpan
 //
 //  Created by Nima Nassehi on 2025-01-24.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct ImageDataLoaderCacheAdapter: ImageDataLoader {
+struct ImageDataRemoteCacheComposition: ImageDataLoader {
     let cache: ImageDataStore
     let loader: ImageDataLoader
 
