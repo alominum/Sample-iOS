@@ -13,6 +13,15 @@ protocol ViewControllerDelegate {
 
 class MainViewController: UIViewController {
     var delegate: ViewControllerDelegate?
+    private var loader: FeedLoader?
+    private var tableModel: [TableCellViewModel] = [] {
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+
+        }
+    }
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var refreshButtonContainer: UIView!
@@ -24,28 +33,49 @@ class MainViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
 
+        loader = RemoteFeedLoader(url: URL(string: "https://dog.ceo/api/breeds/list/all")!, client: URLSessionHTTPClient(session: URLSession.shared))
+
         setupUI()
+
         refresh()
     }
 
     private func setupUI() {
         refreshButtonContainer.addShaddow()
         loadingIndicator.hidesWhenStopped = true
+
     }
 
     @IBAction func refresh() {
-        delegate?.didRequestRefresh()
+        loadingIndicator.startAnimating()
+        loader?.load(completion: { result in
+            switch result {
+            case .success(let dogs):
+                self.tableModel = dogs.map{ TableCellViewModel($0) }
+//                print(dogs)
+            case .failure(let error):
+                print("Error loading: \(error)")
+            }
+
+            DispatchQueue.main.async {
+                self.loadingIndicator.stopAnimating()
+                self.tableView.reloadData()
+            }
+        })
+//        delegate?.didRequestRefresh()
     }
 
 }
 
 extension MainViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        10
+        return tableModel.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        tableView.dequeueReusableCell(withIdentifier: "DogTableCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "DogTableCell", for: indexPath) as! DogTableCell
+        cell.configure(with: tableModel[indexPath.row])
+        return cell
     }
 }
 
