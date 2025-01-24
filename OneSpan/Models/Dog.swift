@@ -7,16 +7,23 @@
 
 import Foundation
 
-public struct Dog: Hashable {
-    public let id: UUID
-    public let breed: String
-    public let subBreed: [String]
-    public let imageUrl: URL?
+struct Dog: Hashable, Decodable {
+    let id: UUID
+    let breed: String
+    let subBreed: [String]
+    let imageUrlApi: URL
+    var imageUrl: URL?
 
-    public init(id: UUID = UUID(), breed: String, subBreed: [String] = [], imageUrl: URL?) {
+    init(id: UUID = UUID(), breed: String, subBreed: [String] = [], imageUrl: URL? = nil) {
         self.id = id
         self.breed = breed
         self.subBreed = subBreed
+        self.imageUrlApi = URLRequest(url: URL(string: "https://dog.ceo/api/breed/\(breed)/images/random")!).url! // We have breed, so the Api will be valid all the times.
         self.imageUrl = imageUrl
     }
+
+    mutating func setImageUrl(_ url: URL) {
+        self.imageUrl = url
+    }
+
 }
