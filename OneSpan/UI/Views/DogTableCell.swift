@@ -17,8 +17,6 @@ class DogTableCell: UITableViewCell {
 
     var onRetry: (() -> Void)?
 
-//    var imageLoader: FeedImageDataLoader?
-
     override func awakeFromNib() {
         super.awakeFromNib()
 
@@ -48,6 +46,5 @@ class DogTableCell: UITableViewCell {
     @IBAction private func retryButtonTapped() {
         onRetry?()
     }
-
     
 }

@@ -29,18 +29,12 @@ final class DogCellController {
             guard let self = self, let imageUrl = self.model.imageURL else { return }
 
             self.task = Task {
-                do {
-                    let imageData = try await self.imageLoader.loadImageData(from: imageUrl)
-                    let image = UIImage(data: imageData)
-                    await MainActor.run {
-                        cell.fadeIn(image)
-                        cell.retryButton.isHidden = (image != nil)
-                        cell.dogImageContainer.isLoading = false
-                    }
-                } catch {
-                    await MainActor.run {
-                        cell.dogImageContainer.isLoading = false
-                    }
+                let imageData = try? await self.imageLoader.loadImageData(from: imageUrl)
+                let image = imageData.map(UIImage.init) ?? nil
+                await MainActor.run {
+                    cell.fadeIn(image)
+                    cell.retryButton.isHidden = (image != nil)
+                    cell.dogImageContainer.isLoading = false
                 }
             }
         }
