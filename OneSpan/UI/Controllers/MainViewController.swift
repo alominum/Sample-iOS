@@ -14,41 +14,33 @@ class MainViewController: UIViewController {
     @IBOutlet weak var refreshButton: UIButton!
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
 
-    private var cellControllers = [IndexPath: DogCellController]()
+    var tableModel: [DogCellController] = [] {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
 
-    private var refreshController: RefreshButtonController?
-    private let imageLoader: FeedImageDataLoader
+    private let refreshController: RefreshButtonController
 
-    init?(coder: NSCoder, titleText: String, feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) {
-        self.imageLoader = imageLoader
-        self.refreshController = RefreshButtonController(feedLoader: feedLoader)
+    init?(coder: NSCoder, refreshController: RefreshButtonController) {
+        self.refreshController = refreshController
         super.init(coder: coder)
-        self.title = titleText
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented. Use init(titleText:detailText:) instead.")
     }
 
-    private var tableModel: [TableCellViewModel] = [] {
-        didSet {
-            self.tableView.reloadData()
-        }
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.prefetchDataSource = self
+        tableView.delegate = self
         tableView.dataSource = self
 
         setupUI()
 
-        refreshController?.setElements(loadingView: loadingIndicator, button: refreshButton)
-        refreshController?.onRefresh = { [weak self] dogs in
-            self?.tableModel = dogs.map{ TableCellViewModel($0) }
-        }
-
-        refreshController?.refresh()
+        refreshController.setElements(loadingView: loadingIndicator, button: refreshButton)
+        refreshController.refresh()
     }
 
     private func setupUI() {
@@ -72,7 +64,7 @@ extension MainViewController: UITableViewDataSource {
 // MARK: - Delegate
 extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        removeCellController(for: indexPath)
+        cancelImageLoading(for: indexPath)
     }
 }
 
@@ -85,20 +77,17 @@ extension MainViewController: UITableViewDataSourcePrefetching {
     }
 
     func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
-        indexPaths.forEach(removeCellController)
+        indexPaths.forEach(cancelImageLoading)
     }
 
     //MARK: - Helpers
 
     fileprivate func cellController(for indexPath: IndexPath) -> DogCellController {
-        let model = tableModel[indexPath.row]
-        let cellController = DogCellController(model: model, imageLoader: imageLoader)
-        cellControllers[indexPath] = cellController
-        return cellController
+        tableModel[indexPath.row]
     }
 
-    private func removeCellController(for indexPath: IndexPath) {
-        cellControllers[indexPath] = nil
+    private func cancelImageLoading(for indexPath: IndexPath) {
+        tableModel[indexPath.row].cancelLoading()
     }
 
 }

@@ -60,7 +60,7 @@ final class DogCellController {
         }
     }
 
-    deinit {
+    func cancelLoading() {
         task?.cancel()
     }
 }
