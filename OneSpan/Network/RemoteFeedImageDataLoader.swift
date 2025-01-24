@@ -1,5 +1,5 @@
 //
-//  RemoteFeedImageDataLoader.swift
+//  RemoteImageDataLoader.swift
 //  OneSpan
 //
 //  Created by Nima Nassehi on 2025-01-24.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public final class RemoteFeedImageDataLoader: FeedImageDataLoader {
+public final class RemoteImageDataLoader: ImageDataLoader {
     private let client: HTTPClient
 
     public init(client: HTTPClient) {

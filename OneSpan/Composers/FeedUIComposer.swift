@@ -10,12 +10,12 @@ import UIKit
 final class UIComposer {
     private init() {}
 
-    static func composedVC(titleText: String, feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) -> MainViewController {
+    static func composedVC(titleText: String, feedLoader: FeedLoader, imageLoader: ImageDataLoader) -> MainViewController {
         let controller = makeMainViewController(titleText: titleText, feedLoader: feedLoader, imageLoader: imageLoader)
         return controller
     }
 
-    private static func makeMainViewController(titleText: String, feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) -> MainViewController {
+    private static func makeMainViewController(titleText: String, feedLoader: FeedLoader, imageLoader: ImageDataLoader) -> MainViewController {
         let refreshController = RefreshButtonController(feedLoader: feedLoader)
 
         let bundle = Bundle(for: MainViewController.self)

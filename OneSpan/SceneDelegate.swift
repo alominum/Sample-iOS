@@ -17,9 +17,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
 
         let feedLoader = RemoteFeedLoader(url: URL(string: "https://dog.ceo/api/breeds/list/all")!, client: URLSessionHTTPClient(session: URLSession.shared))
-        let imageLoader = RemoteFeedImageDataLoader(client: URLSessionHTTPClient(session: URLSession.shared))
 
-        let viewContrtoller = UIComposer.composedVC(titleText: "Dog Breeds", feedLoader: feedLoader, imageLoader: imageLoader)
+        let remoteImageLoader = RemoteImageDataLoader(client: URLSessionHTTPClient(session: URLSession.shared))
+
+        let cache = InMemoryImageDataStore()
+        let localImageLoader = CachedImageDataLoader(cache: cache)
+
+        let remoteWithCacheLoader = ImageDataLoaderCacheAdapter(cache: cache, loader: remoteImageLoader)
+
+        let composedImageLoader = ImageDataLoaderWithFallback(primary: localImageLoader, secondary: remoteWithCacheLoader)
+
+        let viewContrtoller = UIComposer.composedVC(titleText: "Dog Breeds", feedLoader: feedLoader, imageLoader: composedImageLoader)
         let navigation = UINavigationController(rootViewController: viewContrtoller)
 
         window.rootViewController = navigation

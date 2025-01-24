@@ -11,9 +11,9 @@ import UIKit
 final class DogCellController {
     private var task: Task<Void, Never>?
     private let model: TableCellViewModel
-    private let imageLoader: FeedImageDataLoader
+    private let imageLoader: ImageDataLoader
 
-    init(model: TableCellViewModel, imageLoader: FeedImageDataLoader) {
+    init(model: TableCellViewModel, imageLoader: ImageDataLoader) {
         self.model = model
         self.imageLoader = imageLoader
     }
