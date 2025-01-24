@@ -16,7 +16,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
 
-        let viewContrtoller = UIComposer.composedVC(title: "Dog Breeds")
+        let feedLoader = RemoteFeedLoader(url: URL(string: "https://dog.ceo/api/breeds/list/all")!, client: URLSessionHTTPClient(session: URLSession.shared))
+        let imageLoader = RemoteFeedImageDataLoader(client: URLSessionHTTPClient(session: URLSession.shared))
+
+        let viewContrtoller = UIComposer.composedVC(titleText: "Dog Breeds", feedLoader: feedLoader, imageLoader: imageLoader)
         let navigation = UINavigationController(rootViewController: viewContrtoller)
 
         window.rootViewController = navigation

@@ -7,14 +7,6 @@
 
 import UIKit
 
-protocol ViewControllerDelegate {
-    func didRequestRefresh()
-}
-
-final class RefreshController: NSObject {
-
-}
-
 class MainViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
@@ -22,12 +14,22 @@ class MainViewController: UIViewController {
     @IBOutlet weak var refreshButton: UIButton!
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
 
-    private var feedTask: Task<Void, Never>?
     private var imageTasks: [IndexPath: Task<Void, Never>] = [:]
 
-    var delegate: ViewControllerDelegate?
-    private var feedLoader: FeedLoader?
-    private var imageLoader: FeedImageDataLoader?
+    private let feedLoader: FeedLoader
+    private var refreshController: RefreshButtonController?
+    private let imageLoader: FeedImageDataLoader
+
+    init?(coder: NSCoder, titleText: String, feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) {
+        self.feedLoader = feedLoader
+        self.imageLoader = imageLoader
+        super.init(coder: coder)
+        self.title = titleText
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented. Use init(titleText:detailText:) instead.")
+    }
 
     private var tableModel: [TableCellViewModel] = [] {
         didSet {
@@ -43,37 +45,21 @@ class MainViewController: UIViewController {
         tableView.prefetchDataSource = self
         tableView.dataSource = self
 
-        feedLoader = RemoteFeedLoader(url: URL(string: "https://dog.ceo/api/breeds/list/all")!, client: URLSessionHTTPClient(session: URLSession.shared))
-        imageLoader = RemoteFeedImageDataLoader(client: URLSessionHTTPClient(session: URLSession.shared))
-
         setupUI()
 
-        refresh()
+        refreshController = RefreshButtonController(feedLoader: feedLoader, loadingView: loadingIndicator, button: refreshButton)
+
+        refreshController?.onRefresh = { [weak self] dogs in
+            self?.tableModel = dogs.map{ TableCellViewModel($0) }
+        }
+
+        refreshController?.refresh()
     }
 
     private func setupUI() {
         refreshButtonContainer.addShaddow()
         loadingIndicator.hidesWhenStopped = true
 
-    }
-
-    @IBAction func refresh() {
-        loadingIndicator.startAnimating()
-
-        feedTask = Task {
-            do {
-                let dogs = try await feedLoader?.load() ?? []
-                await MainActor.run {
-                    self.tableModel = dogs.map{ TableCellViewModel($0) }
-                    loadingIndicator.stopAnimating()
-                }
-            } catch {
-                print(error)
-                await MainActor.run {
-                    loadingIndicator.stopAnimating()
-                }
-            }
-        }
     }
 
 }
@@ -100,8 +86,8 @@ extension MainViewController: UITableViewDataSource {
 
             self.imageTasks[indexPath] = Task {
                 do {
-                    let imageData = try await self.imageLoader?.loadImageData(from: imageUrl)
-                    let image = imageData.map(UIImage.init) ?? nil
+                    let imageData = try await self.imageLoader.loadImageData(from: imageUrl)
+                    let image = UIImage(data: imageData)
                     await MainActor.run {
                         cell.fadeIn(image)
                         cell.retryButton.isHidden = (image != nil)
@@ -132,7 +118,7 @@ extension MainViewController: UITableViewDataSourcePrefetching {
             imageTasks[indexPath] = Task {
                 do {
                     guard let url = model.imageURL else { return }
-                    _ = try await self.imageLoader?.loadImageData(from: url)
+                    _ = try await self.imageLoader.loadImageData(from: url)
                 } catch {
 
                 }
