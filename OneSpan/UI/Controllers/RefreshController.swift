@@ -8,8 +8,8 @@
 import UIKit
 
 final class RefreshController {
-    var button: UIButton?
-    var loadingView: UIActivityIndicatorView?
+    var button: Actionable?
+    var loadingView: Animatable?
     private let feedLoader: FeedLoader
 
     var onRefresh: (([Dog]) -> Void)?
@@ -18,7 +18,7 @@ final class RefreshController {
         self.feedLoader = feedLoader
     }
 
-    func setElements(loadingView: UIActivityIndicatorView, button: UIButton) {
+    func setActiors(loadingView: Animatable, button: Actionable) {
         self.button = button
         self.loadingView = loadingView
         let refreshAction = UIAction(title: "Refresh") { (action) in

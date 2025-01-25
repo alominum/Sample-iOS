@@ -9,13 +9,10 @@ import Foundation
 
 final class URLSessionHTTPClient: HTTPClient {
 
-//    private struct TaskWrapper: HTTPClientTask {
-//        let wrapped: Task<(Data, HTTPURLResponse), any Error>
-//
-//        func cancel() {
-//            wrapped.cancel()
-//        }
-//    }
+    enum URLSessionHTTPClientError: Error {
+        case invalidResponse
+        case statusCodeNot200
+    }
 
     private var session: URLSession
 
@@ -28,16 +25,14 @@ final class URLSessionHTTPClient: HTTPClient {
         let (data, response) = try await session.data(from: url)
 
         guard let httpResponse = response as? HTTPURLResponse else {
-            throw URLError(.badServerResponse, userInfo: [NSLocalizedDescriptionKey: "Invalid HTTP response."])
+            throw URLSessionHTTPClientError.invalidResponse
         }
 
         guard httpResponse.statusCode == 200 else {
-            throw URLError(.badServerResponse, userInfo: [
-                NSLocalizedDescriptionKey: "Unexpected status code: \(httpResponse.statusCode)"
-            ])
+            throw URLSessionHTTPClientError.statusCodeNot200
         }
 
         return (data, httpResponse)
     }
-
+    
 }

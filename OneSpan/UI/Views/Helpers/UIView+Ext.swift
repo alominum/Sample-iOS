@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIView {
-    public var isLoading: Bool {
+    var isLoading: Bool {
         set {
             if newValue {
                 startLoading()

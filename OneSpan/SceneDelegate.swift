@@ -13,10 +13,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        guard let windowScene = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene),
+              let endpint = ProcessInfo.processInfo.environment["ENDPOINT"],
+              let endpointURL = URL(string: endpint) else { return }
+
         let window = UIWindow(windowScene: windowScene)
 
-        let feedLoader = RemoteFeedLoader(url: URL(string: "https://dog.ceo/api/breeds/list/all")!, client: URLSessionHTTPClient(session: URLSession.shared))
+        let feedLoader = RemoteFeedLoader(url: endpointURL, client: URLSessionHTTPClient(session: URLSession.shared))
 
         let remoteImageLoader = RemoteImageDataLoader(client: URLSessionHTTPClient(session: URLSession.shared))
 
