@@ -67,6 +67,8 @@ final class URLSessionHTTPClientTests: XCTestCase {
             }
         }
 
+        await Task.yield()
+
         task.cancel()
 
         await task.value
@@ -83,7 +85,5 @@ final class URLSessionHTTPClientTests: XCTestCase {
         trackMemoryLeak(sut, file: file, line: line)
         return sut
     }
-
-
 
 }
