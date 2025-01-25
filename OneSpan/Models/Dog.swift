@@ -18,7 +18,7 @@ struct Dog: Hashable, Decodable {
         self.id = id
         self.breed = breed
         self.subBreed = subBreed
-        self.imageUrlApi = URLRequest(url: URL(string: "https://dog.ceo/api/breed/\(breed)/images/random")!).url! // We have breed, so the Api will be valid all the times.
+        self.imageUrlApi = URLRequest(url: URL(string: "https://dog.ceo/api/breed/\(breed)/images/random")!).url! // Since we have a valid breed, the API will always be valid.
         self.imageUrl = imageUrl
     }
 

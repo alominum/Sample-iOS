@@ -14,13 +14,6 @@
 			remoteGlobalIDString = 3C15CD562D41C676003EB84B;
 			remoteInfo = OneSpan;
 		};
-		3C15CD782D41C677003EB84B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3C15CD4F2D41C676003EB84B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3C15CD562D41C676003EB84B;
-			remoteInfo = OneSpan;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -63,13 +56,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		3C15CD6A2D41C677003EB84B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3C15CD742D41C677003EB84B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -162,10 +148,6 @@
 						CreatedOnToolsVersion = 16.2;
 						TestTargetID = 3C15CD562D41C676003EB84B;
 					};
-					3C15CD762D41C677003EB84B = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = 3C15CD562D41C676003EB84B;
-					};
 				};
 			};
 			buildConfigurationList = 3C15CD522D41C676003EB84B /* Build configuration list for PBXProject "OneSpan" */;
@@ -203,13 +185,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3C15CD752D41C677003EB84B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -227,13 +202,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3C15CD732D41C677003EB84B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -241,11 +209,6 @@
 			isa = PBXTargetDependency;
 			target = 3C15CD562D41C676003EB84B /* OneSpan */;
 			targetProxy = 3C15CD6E2D41C677003EB84B /* PBXContainerItemProxy */;
-		};
-		3C15CD792D41C677003EB84B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 3C15CD562D41C676003EB84B /* OneSpan */;
-			targetProxy = 3C15CD782D41C677003EB84B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

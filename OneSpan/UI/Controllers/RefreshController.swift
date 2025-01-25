@@ -8,7 +8,7 @@
 import UIKit
 
 final class RefreshController {
-    var button: Actionable?
+    var actionable: Actionable?
     var loadingView: Animatable?
     private let feedLoader: FeedLoader
 
@@ -18,13 +18,13 @@ final class RefreshController {
         self.feedLoader = feedLoader
     }
 
-    func setActiors(loadingView: Animatable, button: Actionable) {
-        self.button = button
+    func setActiors(loadingView: Animatable, actionable: Actionable) {
+        self.actionable = actionable
         self.loadingView = loadingView
         let refreshAction = UIAction(title: "Refresh") { (action) in
             self.refresh()
         }
-        self.button?.addAction(refreshAction, for: .touchUpInside)
+        self.actionable?.addAction(refreshAction, for: .touchUpInside)
     }
 
     func refresh() {

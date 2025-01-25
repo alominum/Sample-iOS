@@ -21,10 +21,7 @@ extension XCTestCase {
     enum TestError: Error, Equatable {
         case capturedError
         case cancelled
-    }
-
-    var nonHTTPURLResponse: URLResponse {
-        URLResponse(url: anyURL, mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
+        case invalidResponse
     }
 
     var anyHTTPURLResponse: HTTPURLResponse {

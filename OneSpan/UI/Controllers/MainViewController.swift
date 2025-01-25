@@ -40,7 +40,7 @@ class MainViewController: UIViewController {
 
         setupUI()
 
-        refreshController.setActiors(loadingView: loadingIndicator, button: refreshButton)
+        refreshController.setActiors(loadingView: loadingIndicator, actionable: refreshButton)
         refreshController.refresh()
     }
 
