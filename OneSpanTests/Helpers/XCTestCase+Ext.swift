@@ -17,4 +17,21 @@ extension XCTestCase {
     var anyURL: URL {
         URL(string: "Any-url.com")!
     }
+
+    enum TestError: Error, Equatable {
+        case capturedError
+        case cancelled
+    }
+
+    var nonHTTPURLResponse: URLResponse {
+        URLResponse(url: anyURL, mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
+    }
+
+    var anyHTTPURLResponse: HTTPURLResponse {
+        HTTPURLResponse(url: anyURL, statusCode: 200, httpVersion: nil, headerFields: nil)!
+    }
+
+    var anyData: Data {
+        Data("any data".utf8)
+    }
 }

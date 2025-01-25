@@ -8,26 +8,69 @@
 import XCTest
 @testable import OneSpan
 
-//class HTTPClientSpy2: HTTPClient {
-//
-//    var requestedURLs: [URL] = []
-//
-//    func get(from url: URL) async throws -> (Data, HTTPURLResponse) {
-//        requestedURLs.append(url)
-//        return (Data(), HTTPURLResponse())
-//    }
-//}
-
 final class URLSessionHTTPClientTests: XCTestCase {
 
-    func test_getFromURL_performsGETRequestWithURL() async throws {
-        let sut = makeSUT()
-
-        let (data, _) = try! await sut.get(from: anyURL)
-
-        XCTAssertNotNil(data)
+    override func tearDown() {
+        super.tearDown()
+        URLProtocolStub.removeStub()
     }
 
+    func test_getFromURL_FailsOnRequestError() async throws {
+        let error = TestError.capturedError
+        let sut = makeSUT()
+        URLProtocolStub.stub(data: nil, response: nil, error: error)
+
+        do {
+            _ = try await sut.get(from: anyURL)
+            XCTFail("It supposed to throw an error but did not!")
+        } catch (let receivedError) {
+            XCTAssertNotNil(receivedError)
+        }
+    }
+
+    func test_getFromURL_succeedsOnHTTPURLResponseWithData() async throws {
+        let data = anyData
+        let response = anyHTTPURLResponse
+        let sut = makeSUT()
+        URLProtocolStub.stub(data: data, response: response, error: nil)
+
+        let receivedValues = try await sut.get(from: anyURL)
+
+        XCTAssertEqual(receivedValues.0, data)
+        XCTAssertEqual(receivedValues.1.statusCode, response.statusCode)
+        XCTAssertEqual(receivedValues.1.url, response.url)
+    }
+
+    func test_getFromURL_succeedsWithEmptyDataOnHTTPURLResponseWithNilData() async throws {
+        let sut = makeSUT()
+        let response = anyHTTPURLResponse
+        let emptyData = Data()
+        URLProtocolStub.stub(data: nil, response: response, error: nil)
+
+        let receivedValues = try await sut.get(from: anyURL)
+
+        XCTAssertEqual(receivedValues.0, emptyData)
+        XCTAssertEqual(receivedValues.1.statusCode, response.statusCode)
+        XCTAssertEqual(receivedValues.1.url, response.url)
+    }
+
+    func test_cancelGetFromURLTask_cancelsURLRequest() async {
+        let sut = makeSUT()
+
+        let task = Task {
+            do {
+                _ = try await sut.get(from: anyURL)
+                XCTFail("Expected to throw cancellation error, but succeeded instead.")
+            } catch {
+                let urlError = error as? URLError
+                XCTAssertTrue(urlError?.code == .cancelled, "Expected cancellation, got \(error) instead.")
+            }
+        }
+
+        task.cancel()
+
+        await task.value
+    }
 
     // MARK: - Helpers
 

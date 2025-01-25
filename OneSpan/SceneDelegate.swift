@@ -15,6 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene),
               let endpint = ProcessInfo.processInfo.environment["ENDPOINT"],
+              ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil,
               let endpointURL = URL(string: endpint) else { return }
 
         let window = UIWindow(windowScene: windowScene)

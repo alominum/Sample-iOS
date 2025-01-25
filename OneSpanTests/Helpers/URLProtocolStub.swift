@@ -12,7 +12,6 @@ class URLProtocolStub: URLProtocol {
         let data: Data?
         let response: URLResponse?
         let error: Error?
-        let requestObserver: ((URLRequest) -> Void)?
     }
 
     private static var _stub: Stub?
@@ -24,11 +23,7 @@ class URLProtocolStub: URLProtocol {
     private static let queue = DispatchQueue(label: "URLProtocolStub.queue")
 
     static func stub(data: Data?, response: URLResponse?, error: Error?) {
-        stub = Stub(data: data, response: response, error: error, requestObserver: nil)
-    }
-
-    static func observeRequests(observer: @escaping (URLRequest) -> Void) {
-        stub = Stub(data: nil, response: nil, error: nil, requestObserver: observer)
+        stub = Stub(data: data, response: response, error: error)
     }
 
     static func removeStub() {
@@ -44,7 +39,6 @@ class URLProtocolStub: URLProtocol {
     }
 
     override func startLoading() {
-        print("-----")
         guard let stub = URLProtocolStub.stub else { return }
 
         if let data = stub.data {
@@ -61,7 +55,6 @@ class URLProtocolStub: URLProtocol {
             client?.urlProtocolDidFinishLoading(self)
         }
 
-        stub.requestObserver?(request)
     }
 
     override func stopLoading() {}
