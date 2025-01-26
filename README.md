@@ -7,10 +7,12 @@ A sample iOS application demonstrating fetching and displaying dog breeds using 
 - **Composition** for cell controllers, making each cell responsible for its own configuration
 - **Table View Prefetching** to optimize loading data/images ahead of time
 - **MVC** (Model-View-Controller) Multiple MVC as the high-level architectural pattern
+- **Unit Test** As requested for couple unit tests, the project includes unit tests covering the `RemoteFeedLoader` and `URLSessionHTTPClient`.
 
 ---
 
 ## Table of Contents
+
 1. [Overview](#overview)
 2. [Technologies Used](#technologies-used)
 3. [Design Patterns](#design-patterns)
@@ -41,28 +43,33 @@ This app displays a list of dog breeds retrieved from a remote API. The `MainVie
 
 ## Design Patterns
 
-1. **MVC (Model-View-Controller)**  
+1. **MVC (Model-View-Controller)**
+
    - `MainViewController` acts as the primary Controller for the UI.
    - `RefreshController` acts as the Controller for the LoadingView and Refresh action.
    - `CellController` acts as the Controller for each cell.
-   - The “model” data for the table is represented by an array of `CellController` objects (`tableModel`).  
+   - The “model” data for the table is represented by an array of `CellController` objects (`tableModel`).
    - The table view (`UITableView`) and its cells (`UITableViewCell`) represent the main View layer.
 
-2. **Composition for Cell Logic**  
+2. **Composition for Cell Logic**
+
    - Each cell is driven by a `CellController`, which encapsulates:
      - Loading or prefetching of cell data (e.g., images).
      - Cancelling any ongoing work if the cell is no longer visible or is prefetch-cancelled.
    - This design keeps `MainViewController` lightweight and focused on high-level coordination.
 
-3. **Dependency Injection**  
+3. **Dependency Injection**
+
    - `RefreshController` is passed into `MainViewController` via its custom initializer, allowing easy testing and flexibility to swap different refresh strategies or mock implementations.
 
-4. **Table View Prefetching**  
+4. **Table View Prefetching**
    - By implementing `UITableViewDataSourcePrefetching`, the app can load resources in advance (like images) for upcoming rows. This can improve performance and the user experience.
 
 ---
 
 ## Dependency Diagram
+
+[Alt text](./OneSpan%20Dependency%20Diagram.png 'Dependency Diagram')
 
 ---
 
@@ -71,3 +78,4 @@ This app displays a list of dog breeds retrieved from a remote API. The `MainVie
 1. **Clone** or **Download** the repository:
    ```bash
    git clone https://github.com/YourUsername/OneSpan.git
+   ```

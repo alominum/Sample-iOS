@@ -12,6 +12,7 @@ actor InMemoryImageDataStore: ImageDataStore {
         case notFound
     }
 
+    // This could be injectable
     private var store: [URL: Data] = [:]
     
     func save(_ data: Data, for url: URL) {
