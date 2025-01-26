@@ -69,7 +69,7 @@ This app displays a list of dog breeds retrieved from a remote API. The `MainVie
 
 ## Dependency Diagram
 
-[Alt text](./OneSpan%20Dependency%20Diagram.png 'Dependency Diagram')
+![Dependency Diagram](./OneSpan%20Dependency%20Diagram.png 'Dependency Diagram')
 
 ---
 
