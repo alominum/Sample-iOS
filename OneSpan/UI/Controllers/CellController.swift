@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class DogCellController {
+final class CellController {
     private var task: Task<Void, Never>?
     private let model: TableCellViewModel
     private let imageLoader: ImageDataLoader

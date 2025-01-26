@@ -28,7 +28,7 @@ final class UIComposer {
             Task {
                 await cache.reset()
             }
-            controller?.tableModel = dogs.map{ TableCellViewModel($0) }.map{DogCellController(model: $0, imageLoader: imageLoader)}
+            controller?.tableModel = dogs.map{ TableCellViewModel($0) }.map{ CellController(model: $0, imageLoader: imageLoader) }
         }
 
         return controller

@@ -14,7 +14,7 @@ class MainViewController: UIViewController {
     @IBOutlet weak var refreshButton: UIButton!
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
 
-    var tableModel: [DogCellController] = [] {
+    var tableModel: [CellController] = [] {
         didSet {
             self.tableView.reloadData()
             oldValue.count > 0 ? self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true) : ()
@@ -82,7 +82,7 @@ extension MainViewController: UITableViewDataSourcePrefetching {
     }
 
     //MARK: - Helpers
-    fileprivate func cellController(for indexPath: IndexPath) -> DogCellController {
+    fileprivate func cellController(for indexPath: IndexPath) -> CellController {
         tableModel[indexPath.row]
     }
 
