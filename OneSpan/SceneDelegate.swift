@@ -11,16 +11,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        guard let windowScene = (scene as? UIWindowScene),
+        guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil,
+              let windowScene = (scene as? UIWindowScene),
               let endpint = ProcessInfo.processInfo.environment["ENDPOINT"],
-              ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil,
               let endpointURL = URL(string: endpint) else { return }
 
         let window = UIWindow(windowScene: windowScene)
 
-        let feedLoader = RemoteFeedLoader(url: endpointURL, client: URLSessionHTTPClient(session: URLSession.shared))
+        let urlSessionClient = URLSessionHTTPClient(session: URLSession.shared)
+        let feedLoader = RemoteFeedLoader(url: endpointURL, client: urlSessionClient)
 
         let remoteImageLoader = RemoteImageDataLoader(client: URLSessionHTTPClient(session: URLSession.shared))
 

@@ -18,7 +18,7 @@ final class RefreshController {
         self.feedLoader = feedLoader
     }
 
-    func setActiors(loadingView: Animatable, actionable: Actionable) {
+    func setActors(loadingView: Animatable, actionable: Actionable) {
         self.actionable = actionable
         self.loadingView = loadingView
         let refreshAction = UIAction(title: "Refresh") { (action) in

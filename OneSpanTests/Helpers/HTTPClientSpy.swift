@@ -49,7 +49,6 @@ class HTTPClientSpy: HTTPClient {
             requests.append((url: url, response: nil))
         }
 
-
         if let error = stub?.error {
             throw error
         }

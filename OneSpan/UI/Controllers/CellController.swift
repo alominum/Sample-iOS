@@ -17,6 +17,7 @@ final class CellController {
         self.model = model
         self.imageLoader = imageLoader
     }
+
     func view(for tableView: UITableView, at indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "DogTableCell", for: indexPath) as! DogTableCell
         cell.breedName.text = model.title.capitalized
@@ -46,12 +47,12 @@ final class CellController {
     }
 
     func preload() {
-
         self.task = Task {
             if let imageUrl = self.model.imageURL {
                 _ = try? await self.imageLoader.loadImageData(from: imageUrl)
             }
         }
+        
     }
 
     func cancelLoading() {

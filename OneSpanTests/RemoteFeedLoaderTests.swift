@@ -91,10 +91,9 @@ final class RemoteFeedLoaderTests: XCTestCase {
 
     func test_load_deliversItemsOn200HTTPResponseAndValidJson() async throws {
         let (sut, client) = makeSUT()
-        client.stubResponse(withStatusCode: 200, data: twoDogFeed())
+        client.stubResponse(withStatusCode: 200, data: twoDogsFeed())
 
         let dogs = try await sut.load()
-        XCTAssert(dogs.count > 0)
         XCTAssert(dogs.count == 2)
     }
 
@@ -115,7 +114,7 @@ final class RemoteFeedLoaderTests: XCTestCase {
         return try! JSONSerialization.data(withJSONObject: json)
     }
 
-    private func twoDogFeed() -> Data {
+    private func twoDogsFeed() -> Data {
         let json = ["message":
                         ["affenpinscher": [],
                          "buhund": [

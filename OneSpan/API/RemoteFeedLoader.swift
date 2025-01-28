@@ -32,7 +32,7 @@ final class RemoteFeedLoader: FeedLoader {
 
         let mappedDogs = try mapToDog(data, response: response)
 
-        // Fetching Breed URL for each dog
+        // Fetching Breed imsge URL for each dog
         return try await withThrowingTaskGroup(of: Dog.self) { [weak self] group in
             guard let self = self else { return mappedDogs }
 
