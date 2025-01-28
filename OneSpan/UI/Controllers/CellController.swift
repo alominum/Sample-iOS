@@ -52,7 +52,6 @@ final class CellController {
                 _ = try? await self.imageLoader.loadImageData(from: imageUrl)
             }
         }
-        
     }
 
     func cancelLoading() {

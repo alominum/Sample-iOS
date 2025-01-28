@@ -7,10 +7,15 @@
 
 import UIKit
 
+protocol RefreshControllerDelegate {
+    func showError()
+}
+
 final class RefreshController {
     var actionable: Actionable?
     var loadingView: Animatable?
     private let feedLoader: FeedLoader
+    var delegate: RefreshControllerDelegate?
 
     var onRefresh: (([Dog]) -> Void)?
 
@@ -40,6 +45,7 @@ final class RefreshController {
             } catch {
                 print(error)
                 await MainActor.run {
+                    self.delegate?.showError()
                     loadingView?.stopAnimating()
                 }
             }

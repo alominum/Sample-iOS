@@ -37,6 +37,7 @@ class MainViewController: UIViewController {
         tableView.prefetchDataSource = self
         tableView.delegate = self
         tableView.dataSource = self
+        refreshController.delegate = self
 
         setupUI()
 
@@ -90,4 +91,19 @@ extension MainViewController: UITableViewDataSourcePrefetching {
         tableModel[indexPath.row].cancelLoading()
     }
 
+}
+
+// MARK: - RefreshControllerDelegate
+extension MainViewController: RefreshControllerDelegate {
+    func showError() {
+        let alertController = UIAlertController(
+            title: "Error",
+            message: "Please try agian later.",
+            preferredStyle: .alert
+        )
+
+        let okAction = UIAlertAction(title: "OK", style: .default)
+        alertController.addAction(okAction)
+        present(alertController, animated: true)
+    }
 }
