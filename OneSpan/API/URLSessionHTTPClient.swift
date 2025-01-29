@@ -16,7 +16,7 @@ final class URLSessionHTTPClient: HTTPClient {
 
     private var session: URLSession
 
-    public init(session: URLSession) {
+    init(session: URLSession) {
         self.session = session
     }
 
@@ -34,5 +34,5 @@ final class URLSessionHTTPClient: HTTPClient {
 
         return (data, httpResponse)
     }
-    
+
 }

@@ -83,7 +83,7 @@ extension MainViewController: UITableViewDataSourcePrefetching {
     }
 
     //MARK: - Helpers
-    fileprivate func cellController(for indexPath: IndexPath) -> CellController {
+    private func cellController(for indexPath: IndexPath) -> CellController {
         tableModel[indexPath.row]
     }
 
