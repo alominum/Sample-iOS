@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let urlSessionClient = URLSessionHTTPClient(session: URLSession.shared)
         let feedLoader = RemoteFeedLoader(url: endpointURL, client: urlSessionClient)
 
-        let remoteImageLoader = RemoteImageDataLoader(client: URLSessionHTTPClient(session: URLSession.shared))
+        let remoteImageLoader = RemoteImageDataLoader(client: urlSessionClient)
 
         let cache = InMemoryImageDataStore()
         let localImageLoader = CachedImageDataLoader(cache: cache)

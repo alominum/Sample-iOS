@@ -26,8 +26,10 @@ final class CellController {
         cell.retryButton.isHidden = true
         cell.dogImageContainer.isLoading = true
 
-        let loadImage = { [weak self] in
-            guard let self = self, let imageUrl = self.model.imageURL else { return }
+        let loadImage = { [weak self, weak cell] in
+            guard let self = self,
+                  let cell = cell,
+                  let imageUrl = self.model.imageURL else { return }
 
             self.task = Task {
                 let imageData = try? await self.imageLoader.loadImageData(from: imageUrl)
