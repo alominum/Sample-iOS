@@ -34,7 +34,7 @@ class DogTableCell: UITableViewCell {
     func fadeIn(_ image: UIImage?) {
         dogImageView.image = image
 
-        UIView.animate(withDuration: 0.3, delay: 0.3, options: [], animations:  {
+        UIView.animate(withDuration: 0.2, delay: 0.0, options: [], animations:  {
             self.dogImageView.alpha = 1
         }, completion: { completed in
             if completed {
