@@ -1,4 +1,4 @@
-# OneSpan Interview Project
+# Sample iOS Project
 
 A sample iOS application demonstrating fetching and displaying dog breeds using a table view with image prefetching. This project showcases several key iOS development technologies and design patterns, including:
 
@@ -69,7 +69,7 @@ This app displays a list of dog breeds retrieved from a remote API. The `MainVie
 
 ## Dependency Diagram
 
-![Dependency Diagram](./OneSpan%20Dependency%20Diagram.png 'Dependency Diagram')
+![Dependency Diagram](./Dependency%20Diagram.png 'Dependency Diagram')
 
 ---
 
@@ -77,5 +77,5 @@ This app displays a list of dog breeds retrieved from a remote API. The `MainVie
 
 1. **Clone** or **Download** the repository:
    ```bash
-   git clone https://github.com/YourUsername/OneSpan.git
+   git clone https://github.com/alominum/Sample-iOS.git
    ```

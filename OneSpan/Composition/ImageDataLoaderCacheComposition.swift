@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct ImageDataRemoteCacheComposition: ImageDataLoader {
+struct ImageDataLoaderCacheComposition: ImageDataLoader {
     let cache: ImageDataStore
     let loader: ImageDataLoader
 

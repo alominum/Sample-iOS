@@ -12,22 +12,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil,
-              let windowScene = (scene as? UIWindowScene),
-              let endpint = ProcessInfo.processInfo.environment["ENDPOINT"],
-              let endpointURL = URL(string: endpint) else { return }
+        let windowScene = (scene as? UIWindowScene)
+        let endpint = "https://dog.ceo/api/breeds/list/all" //ProcessInfo.processInfo.environment["ENDPOINT"]!
+        let endpointURL = URL(string: endpint)! // else { return }
 
-        let window = UIWindow(windowScene: windowScene)
+        let window = UIWindow(windowScene: windowScene!)
 
         let urlSessionClient = URLSessionHTTPClient(session: URLSession.shared)
         let feedLoader = RemoteFeedLoader(url: endpointURL, client: urlSessionClient)
 
-        let remoteImageLoader = RemoteImageDataLoader(client: urlSessionClient)
+        let remoteImageLoader = RemoteImageDataLoader(client: urlSessionClient).retry(3)
 
         let cache = InMemoryImageDataStore()
         let localImageLoader = CachedImageDataLoader(cache: cache)
 
-        let remoteLoaderWithCache = ImageDataRemoteCacheComposition(cache: cache, loader: remoteImageLoader)
+        let remoteLoaderWithCache = ImageDataLoaderCacheComposition(cache: cache, loader: remoteImageLoader)
 
         let composedImageLoader = ImageDataLoaderWithFallback(primary: localImageLoader, secondary: remoteLoaderWithCache)
 
@@ -40,4 +39,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.makeKeyAndVisible()
     }
 }
+
 

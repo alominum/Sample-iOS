@@ -15,4 +15,12 @@ extension ImageDataLoader {
     func fallback(_ fallback:ImageDataLoader) -> ImageDataLoader {
         ImageDataLoaderWithFallback(primary: self, secondary: fallback)
     }
+
+    func retry(_ retryCount: UInt) -> ImageDataLoader {
+        var loader: ImageDataLoader = self
+        for _ in 0..<retryCount {
+            loader = loader.fallback(self)
+        }
+        return loader
+    }
 }
